@@ -1,0 +1,58 @@
+/* ===== OPERATOR INPUT POPUP ===== */
+.operator-input {
+    position: fixed;
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 8px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    display: none;
+}
+
+.operator-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.operator-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.operator-btn:hover {
+    background: var(--accent-blue-hover);
+    transform: translateY(-1px);
+}
+
+.operator-btn.and {
+    background: var(--accent-green);
+}
+
+.operator-btn.and:hover {
+    background: var(--accent-green-hover);
+}
+
+.operator-btn.or {
+    background: var(--accent-orange);
+}
+
+.operator-btn.or:hover {
+    background: var(--accent-orange-hover);
+}
+
+.operator-btn.paren {
+    background: var(--accent-purple);
+}
+
+.operator-btn.paren:hover {
+    background: var(--accent-purple-hover);
+}

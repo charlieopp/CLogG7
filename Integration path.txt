@@ -1,0 +1,7 @@
+Re-integration Plan
+- Get rid of dead and redundant code
+- Resizable window
+- Server integration with multiple left/right backends all wss / 8847
+- File open on server
+- Prepare for filter_pills json and state management. Include clear-state function
+- Search box

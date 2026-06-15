@@ -1,0 +1,45 @@
+/* CodeMirror 6 styles */
+.codemirror-container {
+  width: 100%;
+  height: 100%;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.codemirror-container .cm-editor {
+  height: 100%;
+}
+
+.codemirror-container .cm-scroller {
+  height: 100%;
+}
+
+/* Line highlighting classes */
+.log-line-selected {
+  background-color: var(--highlight-selected, #ffffcc);
+}
+
+.log-line-start-event {
+  background-color: var(--highlight-start, #00ff00) !important;
+  color: black !important;
+}
+
+.log-line-end-event {
+  background-color: var(--highlight-end, #ff0000) !important;
+  color: white !important;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .log-line-selected {
+  background-color: var(--highlight-selected-dark, #4a4a00);
+}
+
+[data-theme="dark"] .log-line-start-event {
+  background-color: var(--highlight-start-dark, #00ff00) !important;
+  color: black !important;
+}
+
+[data-theme="dark"] .log-line-end-event {
+  background-color: var(--highlight-end-dark, #ff0000) !important;
+  color: white !important;
+}

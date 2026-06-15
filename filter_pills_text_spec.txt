@@ -1,0 +1,136 @@
+FILTER PILLS JSON FORMAT & AUTO-STATE SPECIFICATION
+====================================================
+
+1. JSON FORMAT FOR FILTER PILLS
+================================
+
+Expression Structure:
+{
+  "version": "1.0",
+  "enabled": true,
+  "expression": [
+    // Array of filter elements in order
+  ]
+}
+
+Filter Element Types:
+
+Text Filter:
+{
+  "type": "text",
+  "operator": "contains" | "excludes", 
+  "value": "ERROR",
+  "enabled": true
+}
+
+Time Filter:
+{
+  "type": "time",
+  "operator": ">=" | "<=",
+  "value": "Feb  9 2025 10:30:00.000", 
+  "enabled": true
+}
+
+Logical Operator:
+{
+  "type": "operator",
+  "operator": "AND" | "OR" | "NOT",
+  "enabled": true
+}
+
+Parenthesis:
+{
+  "type": "paren", 
+  "operator": "(" | ")",
+  "enabled": true
+}
+
+Complete Example:
+{
+  "version": "1.0",
+  "enabled": true,
+  "expression": [
+    {
+      "type": "paren",
+      "operator": "(",
+      "enabled": true
+    },
+    {
+      "type": "text", 
+      "operator": "contains",
+      "value": "ERROR",
+      "enabled": true
+    },
+    {
+      "type": "operator",
+      "operator": "OR", 
+      "enabled": true
+    },
+    {
+      "type": "text",
+      "operator": "contains", 
+      "value": "WARN",
+      "enabled": true
+    },
+    {
+      "type": "paren",
+      "operator": ")",
+      "enabled": true
+    },
+    {
+      "type": "operator",
+      "operator": "AND",
+      "enabled": false
+    },
+    {
+      "type": "text",
+      "operator": "excludes",
+      "value": "DEBUG", 
+      "enabled": false
+    }
+  ]
+}
+
+2. AUTOMATIC STATE PERSISTENCE
+===============================
+
+Architecture:
+- CombinedFilterStateManager (CFSM): Global singleton managing state for multiple filter instances
+- Host Application: Handles actual persistence (localStorage, backend, etc.)
+- Filter Instances: Push/pull state to/from CFSM automatically
+
+State Flow:
+FilterManager <-> CFSM <-> Host Application <-> Persistence Layer
+
+Required Methods:
+
+FilterManager Integration:
+// FilterManager must implement:
+exportState()     // Returns JSON format above
+importState(data) // Accepts JSON format above  
+hasContent()      // Returns true if has filters/operators
+
+CFSM Usage Pattern:
+// 1. Register instance
+window.CFSM.registerInstance('main-filter', filterManager);
+
+// 2. Auto-save when changes occur
+filterManager.onChange = () => {
+  window.CFSM.pushState('main-filter');
+};
+
+// 3. Host handles persistence
+window.CFSM.updateFromAllInstances(); // Collect all states
+const allState = window.CFSM.getPublicState(); // Get for saving
+localStorage.setItem('filter_state', JSON.stringify(allState));
+
+// 4. Restore on startup
+const savedState = JSON.parse(localStorage.getItem('filter_state') || '{}');
+window.CFSM.setPublicState(savedState);
+// Instances auto-restore when registered
+
+Key Characteristics:
+- Automatic: No user interaction required
+- Multi-Instance: Supports multiple filter widgets on same page
+- Transparent: Host app controls where/how persistence happens
+- Simple: Just JSON in/out, no complex state management

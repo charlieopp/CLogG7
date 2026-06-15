@@ -1,0 +1,48 @@
+{
+  "3a": {
+    "fileId": "syslog_trunc_jun14.log",
+    "filters": {
+      "include": [
+        "comet_controller.py"
+      ],
+      "exclude": [],
+      "regex": ""
+    }
+  },
+  "3b": {
+    "fileId": "syslog_trunc_jun14.log",
+    "filters": {
+      "include": [],
+      "exclude": [
+        "idrivecron"
+      ],
+      "regex": ""
+    }
+  },
+  "3c": {
+    "fileId": "syslog_trunc_jun14.log",
+    "filters": {
+      "include": [],
+      "exclude": [],
+      "regex": "CallReceived|CallAnswered"
+    }
+  },
+  "7a": {
+    "fileId": "syslog_trunc_jun14.log",
+    "startPattern": "CallReceived",
+    "endPattern": "CallEnded",
+    "maxLines": 100
+  },
+  "7b": {
+    "fileId": "syslog_trunc_jun14.log",
+    "startPattern": "ActivateAudio",
+    "endPattern": "DeactivateAudio",
+    "maxLines": 200
+  },
+  "7c": {
+    "fileId": "syslog_trunc_jun14.log",
+    "startPattern": "onCallReceived",
+    "endPattern": "onCallEnded",
+    "maxLines": 150
+  }
+}

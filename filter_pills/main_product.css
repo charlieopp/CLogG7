@@ -1,0 +1,215 @@
+/* Ultra-compact button row styling */
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Reduced from 8px */
+    margin-bottom: 3px; /* Reduced from 6px */
+    flex-wrap: wrap;
+    min-height: 20px; /* Reduced from 28px */
+}
+
+.filter-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Reduced from 8px */
+    flex: 1;
+}
+
+.filter-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Reduced from 8px */
+    margin-left: auto;
+}
+
+/* Ultra-compact control buttons */
+.control-btn {
+    background: #4a4a4a;
+    color: var(--text-primary);
+    border: 1px solid #666;
+    border-radius: 2px; /* Reduced from 3px */
+    padding: 2px 6px; /* Reduced from 4px 8px */
+    cursor: pointer;
+    font-size: 10px; /* Reduced from 11px */
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    height: 20px; /* Reduced from 24px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.control-btn:hover {
+    background: #5a5a5a;
+    border-color: #777;
+}
+
+.control-btn:disabled {
+    background: #333;
+    color: #666;
+    border-color: #444;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Ultra-compact add filter button */
+.add-filter-btn {
+    background: var(--accent-green);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 10px; /* Reduced from 12px */
+    padding: 2px 8px; /* Reduced from 4px 10px */
+    cursor: pointer;
+    font-size: 10px; /* Reduced from 11px */
+    transition: all 0.2s ease;
+    height: 20px; /* Reduced from 24px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.add-filter-btn:hover:not(:disabled) {
+    background: var(--accent-green-hover);
+    transform: scale(1.02); /* Reduced from 1.03 */
+}
+
+.add-filter-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+/* Ultra-compact modal toggle button */
+.modal-toggle-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: 1px solid var(--accent-blue-hover);
+    border-radius: 2px; /* Reduced from 3px */
+    padding: 2px 8px; /* Reduced from 4px 12px */
+    cursor: pointer;
+    font-size: 10px; /* Reduced from 11px */
+    font-weight: 600;
+    transition: all 0.2s ease;
+    height: 20px; /* Reduced from 24px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px; /* Reduced from 35px */
+    line-height: 1;
+}
+
+.modal-toggle-btn.on {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue-hover);
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+}
+
+.modal-toggle-btn.on:hover {
+    background: var(--accent-blue-hover);
+    transform: scale(1.02); /* Reduced from 1.03 */
+}
+
+/* Modal toggle button - OFF state */
+.modal-toggle-btn.off {
+    background: #555;
+    border-color: #666;
+    color: #aaa;
+    opacity: 0.7;
+}
+
+.modal-toggle-btn.off:hover {
+    background: #666;
+    border-color: #777;
+    color: #ccc;
+}
+
+/* Modal toggle button - disabled state */
+.modal-toggle-btn:disabled {
+    background: #333;
+    color: #666;
+    border-color: #444;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.modal-toggle-btn:disabled:hover {
+    background: #333;
+    border-color: #444;
+    transform: none;
+}
+
+/* Ultra-compact clear all button */
+.clear-all-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: 1px solid var(--accent-blue-hover);
+    border-radius: 2px; /* Reduced from 3px */
+    padding: 2px 8px; /* Reduced from 4px 12px */
+    cursor: pointer;
+    font-size: 10px; /* Reduced from 11px */
+    font-weight: 600;
+    transition: all 0.2s ease;
+    height: 20px; /* Reduced from 24px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px; /* Reduced from 35px */
+    line-height: 1;
+}
+
+.clear-all-btn:hover {
+    background: var(--accent-blue-hover);
+    transform: scale(1.02); /* Reduced from 1.03 */
+}
+
+.clear-all-btn:active {
+    transform: scale(0.98);
+}
+
+.clear-all-btn:disabled {
+    background: #333;
+    color: #666;
+    border-color: #444;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Ultra-compact disable selected terms button */
+.disable-selected-terms-btn {
+    background: #666;
+    color: white;
+    border: 1px solid #777;
+    border-radius: 2px; /* Reduced from 3px */
+    padding: 2px 6px; /* Reduced from 4px 8px */
+    cursor: pointer;
+    font-size: 9px; /* Reduced from 10px */
+    transition: all 0.2s ease;
+    height: 20px; /* Reduced from 24px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.disable-selected-terms-btn:enabled {
+    background: var(--accent-red);
+    border-color: var(--accent-red-hover);
+}
+
+.disable-selected-terms-btn:enabled:hover {
+    background: var(--accent-red-hover);
+    transform: scale(1.02); /* Reduced from 1.03 */
+}
+
+.disable-selected-terms-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ultra-compact filters container */
+.filters-container {
+    min-height: 32px; /* Reduced from 36px */
+    padding: 4px; /* Reduced from 6px */
+}

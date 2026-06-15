@@ -1,0 +1,44 @@
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 40px);
+    }
+    
+    .panel {
+        min-width: auto;
+        min-height: 300px;
+    }
+    
+    .resizer {
+        display: none;
+    }
+    
+    .control-frame {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .filter-area {
+        padding: 8px;
+        min-height: 50px;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

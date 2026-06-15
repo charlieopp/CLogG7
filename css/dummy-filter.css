@@ -1,0 +1,143 @@
+/* ===== DUMMY FILTER SYSTEM CSS ===== */
+
+/* Filter controls at top of filter area */
+.dummy-filter-controls {
+    background: var(--bg-tertiary, #1e1e1e);
+    border: 1px solid var(--border-color, #444);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+}
+
+.dummy-control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.dummy-status-row {
+    display: flex;
+    align-items: center;
+}
+
+.dummy-filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-primary, #ffffff);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.dummy-filter-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-blue, #4a90e2);
+    cursor: pointer;
+}
+
+.dummy-apply-btn {
+    background: var(--accent-blue, #4a90e2);
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.dummy-apply-btn:hover {
+    background: var(--accent-blue-hover, #5ba0f2);
+    transform: translateY(-1px);
+}
+
+.dummy-status {
+    font-size: 11px;
+    color: var(--text-secondary, #ccc);
+    font-style: italic;
+}
+
+/* Pills area - this is where real filter pills will go */
+.dummy-pills-area {
+    min-height: 30px;
+    background: var(--bg-secondary, #2d2d2d);
+    border: 1px dashed var(--border-color, #444);
+    border-radius: 4px;
+    padding: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: flex-start;
+    /* This will grow vertically as pills are added */
+    flex-direction: row;
+}
+
+.dummy-pill-placeholder {
+    background: var(--bg-primary, #1a1a1a);
+    border: 1px solid var(--border-color, #444);
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-size: 10px;
+    color: var(--text-muted, #777);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dummy-pill-placeholder code {
+    color: var(--accent-orange, #ff6b35);
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    display: block;
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+/* Disabled state */
+.dummy-filter-controls.disabled {
+    opacity: 0.6;
+}
+
+.dummy-filter-controls.disabled .dummy-status {
+    color: var(--text-muted, #777);
+}
+
+.dummy-filter-controls.disabled .dummy-pill-placeholder code {
+    color: var(--text-muted, #777);
+}
+
+/* Important: Keep checkbox functional even when filter is disabled */
+.dummy-filter-controls.disabled input[type="checkbox"] {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.dummy-filter-controls.disabled .dummy-filter-toggle {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* Hover effects */
+.dummy-filter-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+}
+
+/* Responsive behavior - pills area grows as needed */
+.dummy-pills-area:not(:empty) {
+    min-height: auto;
+}
+
+/* When real pills are added, they should wrap nicely */
+.filter-pill {
+    flex-shrink: 0;
+    margin: 2px;
+}

@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Python virtual environments
+Server/venv/
+Server/.venv/
+Server/__pycache__/
+
+# Test / sample log files (large, not part of the app)
+Server/*.log
+
+# Build output
+dist/
+.vite/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp

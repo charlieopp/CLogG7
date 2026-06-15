@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMirror 6 Log Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #282a36;
+            color: #f8f8f2;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #282a36;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #44475a;
+        }
+        h1 {
+            color: #bd93f9;
+            margin-bottom: 24px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1000;
+        }
+        .search-input-container {
+            position: relative;
+            margin-bottom: 16px;
+            z-index: 1001;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 1px solid #44475a;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #44475a;
+            color: #f8f8f2;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #bd93f9;
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+        }
+        .search-help {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6272a4;
+            font-size: 18px;
+            cursor: help;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+        .search-help:hover {
+            opacity: 1;
+            color: #bd93f9;
+        }
+        .search-tooltip {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            background: #44475a !important;
+            border: 1px solid #6272a4;
+            border-radius: 6px;
+            padding: 12px;
+            min-width: 480px;
+            width: 480px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .search-help:hover .search-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        .search-tooltip h4 {
+            margin: 0 0 8px 0;
+            color: #bd93f9;
+            font-size: 14px;
+        }
+        .search-tooltip code {
+            background-color: #282a36;
+            color: #f1fa8c;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Fira Code', monospace;
+        }
+        .search-tooltip ul {
+            margin: 4px 0;
+            padding-left: 16px;
+        }
+        .search-tooltip li {
+            margin: 2px 0;
+            color: #f8f8f2;
+        }
+        .color-palette-container {
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+            isolation: isolate;
+        }
+        .color-palette-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #f8f8f2;
+        }
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: #f8f8f2;
+        }
+        .color-option.active {
+            border-color: #bd93f9;
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.3);
+        }
+        .color-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #282a36;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .color-label {
+            font-size: 11px;
+            color: #f8f8f2;
+            text-align: center;
+            min-width: 60px;
+            opacity: 0.8;
+        }
+        .color-item:hover .color-label {
+            opacity: 1;
+            color: #bd93f9;
+        }
+        .editor-container {
+            border: 1px solid #44475a;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #282a36;
+        }
+        .cm-editor {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .cm-focused {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CodeMirror 6 Log Viewer</h1>
+        <div class="search-container">
+            <div class="search-input-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search logs...">
+                <div class="search-help">?
+                    <div class="search-tooltip">
+                        <h4>Search Grammar</h4>
+                        <p><strong>Simple Search:</strong></p>
+                        <ul>
+                            <li><code>term</code> - highlights "term" everywhere</li>
+                            <li><code>term1, term2</code> - highlights both terms everywhere</li>
+                        </ul>
+                        <p><strong>Logical Search (per line):</strong></p>
+                        <ul>
+                            <li><code>term1 _& term2</code> - highlights both terms only in lines containing both</li>
+                            <li><code>term1 _| term2</code> - highlights both terms in lines containing either</li>
+                            <li><code>_! term</code> - highlights all terms in lines NOT containing "term"</li>
+                            <li><code>_( term1 _& term2 _)</code> - grouping for complex expressions</li>
+                        </ul>
+                        <p><strong>Examples:</strong></p>
+                        <ul>
+                            <li><code>ERROR _& Service</code> - "ERROR" and "Service" highlighted only in lines with both</li>
+                            <li><code>_( INFO _| DEBUG _) _& timeout</code> - complex grouping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="color-palette-container">
+                <label>Highlight Color:</label>
+                <div class="color-palette">
+                    <div class="color-item">
+                        <div class="color-option active" data-color="#ffb86c" style="background-color: #ffb86c;" title="Dracula Orange"></div>
+                        <span class="color-label">#ffb86c</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#50fa7b" style="background-color: #50fa7b;" title="Dracula Green"></div>
+                        <span class="color-label">#50fa7b</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#8be9fd" style="background-color: #8be9fd;" title="Dracula Cyan"></div>
+                        <span class="color-label">#8be9fd</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#ff79c6" style="background-color: #ff79c6;" title="Dracula Pink"></div>
+                        <span class="color-label">#ff79c6</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#bd93f9" style="background-color: #bd93f9;" title="Dracula Purple"></div>
+                        <span class="color-label">#bd93f9</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#f1fa8c" style="background-color: #f1fa8c;" title="Dracula Yellow"></div>
+                        <span class="color-label">#f1fa8c</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#ff5555" style="background-color: #ff5555;" title="Dracula Red"></div>
+                        <span class="color-label">#ff5555</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#6272a4" style="background-color: #6272a4;" title="Dracula Comment"></div>
+                        <span class="color-label">#6272a4</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#44475a" style="background-color: #44475a;" title="Dracula Selection"></div>
+                        <span class="color-label">#44475a</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-option" data-color="#ffb86c80" style="background-color: #ffb86c80;" title="Dracula Orange (Semi-transparent)"></div>
+                        <span class="color-label">#ffb86c80</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="editor-container">
+            <div id="editor"></div>
+        </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+</body>
+</html>

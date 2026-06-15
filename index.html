@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLog - Log Viewer</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/controls.css">
+    <link rel="stylesheet" href="css/log-display.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/operator-input.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="filter_pills/styles.css">
+    <link rel="stylesheet" href="filter_pills/filterpill-enhanced.css">
+    <link rel="stylesheet" href="filter_pills/main_product.css">
+    <link rel="stylesheet" href="css/codemirror.css">
+    <!-- CodeMirror 6 CSS is handled by Vite imports -->
+    <script>
+    // New filter pills system - globals handled by CFSM
+    console.log('CLog application starting...');
+</script>
+</head>
+<body>
+    <div class="main-container" id="mainContainer">
+        <!-- Left Panel -->
+        <div class="panel" id="leftPanel">
+            <div class="control-frame">
+                <button class="control-btn" id="selectLogLeftBtn">Open</button>
+                <div class="path-label" id="leftPathLabel">No file selected</div>
+                <button class="control-btn" id="buildSequencesBtn">Show Sequences</button>
+                <button class="control-btn" id="loadSequencesBtn">Load Sequences</button>
+                <button class="control-btn disabled" id="useSequencesBtn">Use Sequences</button>
+                <div class="right-controls">
+                    <div class="connection-status" id="leftConnectionStatus" title="Backend Connection Status">
+                        <span class="status-indicator disconnected">●</span>
+                        <span class="status-text">Backend</span>
+                    </div>
+                    <button class="control-btn" id="settingsBtn" title="Settings">⚙️</button>
+                    <button class="control-btn" id="saveStateBtn" title="Save State">💾</button>
+                    <button class="control-btn" id="refreshLeftBtn" title="Refresh">🔄</button>
+                    <button class="control-btn" id="followLeftBtn">Tail</button>
+                    <button class="control-btn" id="syncLeftBtn">Sync Point</button>
+                    <button class="control-btn" id="sideBySideBtn">Side by Side</button>
+                </div>
+            </div>
+            
+            <!-- Line Range Bar -->
+            <div class="line-range-bar" id="lineRangeBar_left">
+                <span class="line-range-info" id="lineRangeInfo_left">No file loaded</span>
+                <div class="line-range-controls">
+                    <input type="number" class="line-range-input" id="lineRangeFrom_left" min="1" placeholder="from">
+                    <span>-</span>
+                    <input type="number" class="line-range-input" id="lineRangeTo_left" min="1" placeholder="to">
+                    <button class="control-btn" id="lineRangeGoBtn_left">Go</button>
+                    <button class="control-btn" id="lineRangeAllBtn_left">All</button>
+                </div>
+            </div>
+
+            <!-- Sequence Definition Area -->
+            <div class="sequence-definition-area hidden" id="sequenceDefinitionArea">
+                <div class="sequence-controls">
+                    <div class="sequence-rows">
+                        <div class="sequence-row">
+                            <button class="sequence-set-btn" id="setStartEventBtn">Set sequence start event</button>
+                            <div class="sequence-event-display" id="startEventDisplay">
+                                <span class="sequence-placeholder">No start event selected</span>
+                            </div>
+                        </div>
+                        <div class="sequence-row">
+                            <button class="sequence-set-btn" id="setEndEventBtn">Set sequence end event</button>
+                            <div class="sequence-event-display" id="endEventDisplay">
+                                <span class="sequence-placeholder">No end event selected</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sequence-action-buttons">
+                        <button class="sequence-start-btn disabled" id="startSequenceBtn">Refine sequence definition</button>
+                        <button class="sequence-clear-btn" id="clearSequenceBtn">Clear selections</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-display" id="leftLogDisplay">
+                <textarea id="leftLogContent" style="display: none;"></textarea>
+                <div class="sync-overlay hidden" id="leftSyncOverlay">
+                    Click on a log line to set sync point
+                </div>
+            </div>
+            
+            <div class="filter-area">
+                <div id="leftFiltersContainer">
+                    <div class="filter-controls">
+                        <div class="filter-controls-left">
+                            <button class="modal-toggle-btn on" id="modalToggle_left">ON</button>
+                            <button class="add-filter-btn" id="addFilterBtn_left">+ Add Filter</button>
+                            <button id="disableSelectedTermsBtn_left" class="disable-selected-terms-btn" disabled>Disable Selected Terms</button>
+                        </div>
+                        <div class="filter-controls-right">
+                            <button id="clearAllBtn_left" class="clear-all-btn" title="Clear all filters and reset to default state">Clear</button>
+                            <span style="margin-left: 20px;"></span>
+                            <button id="saveExpressionBtn_left" class="modal-toggle-btn on">Save</button>
+                            <button id="loadExpressionBtn_left" class="modal-toggle-btn on">Load</button>
+                        </div>
+                    </div>
+                    <div class="filters-container" id="filtersContainer_left">
+                        <div class="placeholder-text" style="color: var(--text-muted); font-style: italic; pointer-events: none; user-select: none;">
+                            Click "Add Filter" to create filter pills, or click anywhere here to add operators
+                        </div>
+                    </div>
+                    <div class="expression-preview" id="expressionPreview_left">
+                        Expression will appear here...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resizer (hidden by default) -->
+        <div class="resizer" id="panelResizer" style="display: none;"></div>
+        
+        <!-- Right Panel (hidden by default) -->
+        <div class="panel" id="rightPanel" style="display: none;">
+            <div class="control-frame">
+                <button class="control-btn" id="selectLogRightBtn">Open</button>
+                <div class="path-label" id="rightPathLabel">No file selected</div>
+                <button class="control-btn" id="buildSequencesRightBtn">Show Sequences</button>
+                <button class="control-btn" id="loadSequencesRightBtn">Load Sequences</button>
+                <button class="control-btn disabled" id="useSequencesRightBtn">Use Sequences</button>
+                <div class="right-controls">
+                    <div class="connection-status" id="rightConnectionStatus" title="Backend Connection Status">
+                        <span class="status-indicator disconnected">●</span>
+                        <span class="status-text">Backend</span>
+                    </div>
+                    <button class="control-btn" id="refreshRightBtn" title="Refresh">🔄</button>
+                    <button class="control-btn" id="followRightBtn">Tail</button>
+                    <button class="control-btn" id="syncRightBtn">Sync Point</button>
+                    <button class="control-btn copy-from" id="copyFromLeftBtn">Copy From Left</button>
+                </div>
+            </div>
+            
+            <!-- Line Range Bar -->
+            <div class="line-range-bar" id="lineRangeBar_right">
+                <span class="line-range-info" id="lineRangeInfo_right">No file loaded</span>
+                <div class="line-range-controls">
+                    <input type="number" class="line-range-input" id="lineRangeFrom_right" min="1" placeholder="from">
+                    <span>-</span>
+                    <input type="number" class="line-range-input" id="lineRangeTo_right" min="1" placeholder="to">
+                    <button class="control-btn" id="lineRangeGoBtn_right">Go</button>
+                    <button class="control-btn" id="lineRangeAllBtn_right">All</button>
+                </div>
+            </div>
+
+            <!-- Sequence Definition Area for Right Panel -->
+            <div class="sequence-definition-area hidden" id="sequenceDefinitionAreaRight">
+                <div class="sequence-controls">
+                    <div class="sequence-rows">
+                        <div class="sequence-row">
+                            <button class="sequence-set-btn" id="setStartEventRightBtn">Set sequence start event</button>
+                            <div class="sequence-event-display" id="startEventDisplayRight">
+                                <span class="sequence-placeholder">No start event selected</span>
+                            </div>
+                        </div>
+                        <div class="sequence-row">
+                            <button class="sequence-set-btn" id="setEndEventRightBtn">Set sequence end event</button>
+                            <div class="sequence-event-display" id="endEventDisplayRight">
+                                <span class="sequence-placeholder">No end event selected</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sequence-action-buttons">
+                        <button class="sequence-start-btn disabled" id="startSequenceRightBtn">Refine sequence definition</button>
+                        <button class="sequence-clear-btn" id="clearSequenceRightBtn">Clear selections</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-display" id="rightLogDisplay">
+                <textarea id="rightLogContent" style="display: none;"></textarea>
+                <div class="sync-overlay hidden" id="rightSyncOverlay">
+                    Click on a log line to set sync point
+                </div>
+            </div>
+            
+            <div class="filter-area">
+                <div id="rightFiltersContainer">
+                    <div class="filter-controls">
+                        <div class="filter-controls-left">
+                            <button class="modal-toggle-btn on" id="modalToggle_right">ON</button>
+                            <button class="add-filter-btn" id="addFilterBtn_right">+ Add Filter</button>
+                            <button id="disableSelectedTermsBtn_right" class="disable-selected-terms-btn" disabled>Disable Selected Terms</button>
+                        </div>
+                        <div class="filter-controls-right">
+                            <button id="clearAllBtn_right" class="clear-all-btn" title="Clear all filters and reset to default state">Clear</button>
+                            <span style="margin-left: 20px;"></span>
+                            <button id="saveExpressionBtn_right" class="modal-toggle-btn on">Save</button>
+                            <button id="loadExpressionBtn_right" class="modal-toggle-btn on">Load</button>
+                        </div>
+                    </div>
+                    <div class="filters-container" id="filtersContainer_right">
+                        <div class="placeholder-text" style="color: var(--text-muted); font-style: italic; pointer-events: none; user-select: none;">
+                            Click "Add Filter" to create filter pills, or click anywhere here to add operators
+                        </div>
+                    </div>
+                    <div class="expression-preview" id="expressionPreview_right">
+                        Expression will appear here...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Old filter system removed - using new filter pills system -->
+
+<!-- Load CLog modules -->
+<script src="js/settings-manager.js"></script>
+<script src="js/websocket-client.js"></script>
+<script src="js/connection-status-manager.js"></script>
+<script src="js/websocket-api-client.js"></script>
+<script src="js/remote-file-browser.js"></script>
+<!-- Filter Pills system (in dependency order) -->
+<script src="filter_pills/TimeParser.js"></script>
+<script src="filter_pills/FilterPill.js"></script>
+<script src="filter_pills/TimePill.js"></script>
+<script src="filter_pills/Operator.js"></script>
+<script src="filter_pills/FilterState.js"></script>
+<script src="filter_pills/FilterElements.js"></script>
+<script src="filter_pills/FilterInteraction.js"></script>
+<script src="filter_pills/FilterTermsDisable.js"></script>
+<script src="filter_pills/FilterManager.js"></script>
+<script src="filter_pills/OperatorPopup.js"></script>
+<script src="filter_pills/SaveLoad.js"></script>
+<script src="filter_pills/CombinedFilterStateManager.js"></script>
+<script src="filter_pills/FilterPillsApp.js"></script>
+<script src="js/filter-pills-integration.js"></script>
+<script src="js/settings-ui.js"></script>
+<script src="js/state-manager.js"></script>
+<script src="js/panel-manager.js"></script>
+<script src="js/line-range-manager.js"></script>
+<script src="js/sequence-loader.js"></script>
+<script src="js/sequence-manager.js"></script>
+<script src="js/ui-manager-filters.js"></script>
+<script src="js/ui-manager-sequences.js"></script>
+<!-- UI Manager modules (split for maintainability) -->
+<script src="js/ui-manager-utils.js"></script>
+<script src="js/ui-manager-modals.js"></script>
+<script src="js/ui-manager-codemirror.js"></script>
+<script src="js/ui-manager-events.js"></script>
+<script src="js/ui-manager-sequence-marking.js"></script>
+<script src="js/ui-manager-core.js"></script>
+<script src="js/app.js"></script>
+<!-- CodeMirror 6 module - loaded after CLog modules -->
+<script type="module" src="js/main.js"></script>
+
+<!-- Filter Pills: Operator Input Popups (per instance) -->
+    <div class="operator-input" id="operatorInput_left">
+        <div class="operator-buttons">
+            <button class="operator-btn and" onclick="OperatorPopup.insertOperator('AND')">AND</button>
+            <button class="operator-btn or" onclick="OperatorPopup.insertOperator('OR')">OR</button>
+            <button class="operator-btn" onclick="OperatorPopup.insertOperator('NOT')">NOT</button>
+            <button class="operator-btn paren" onclick="OperatorPopup.insertOperator('(')">(</button>
+            <button class="operator-btn paren" onclick="OperatorPopup.insertOperator(')')">)</button>
+        </div>
+    </div>
+
+    <div class="operator-input" id="operatorInput_right">
+        <div class="operator-buttons">
+            <button class="operator-btn and" onclick="OperatorPopup.insertOperator('AND')">AND</button>
+            <button class="operator-btn or" onclick="OperatorPopup.insertOperator('OR')">OR</button>
+            <button class="operator-btn" onclick="OperatorPopup.insertOperator('NOT')">NOT</button>
+            <button class="operator-btn paren" onclick="OperatorPopup.insertOperator('(')">(</button>
+            <button class="operator-btn paren" onclick="OperatorPopup.insertOperator(')')">)</button>
+        </div>
+    </div>
+
+    <!-- Filter Pills: Save/Load Expression Modals (per instance) -->
+    <div class="modal-overlay" id="saveModal_left" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">💾 Save Filter Expression (Left)</div>
+            <div class="modal-content">
+                <input type="text" class="modal-input" id="expressionName_left" placeholder="Enter expression name...">
+                <textarea class="modal-textarea" id="expressionJson_left" placeholder="Expression JSON will appear here..." readonly></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="SaveLoad.closeSaveModal('left')">Cancel</button>
+                <button class="modal-btn" onclick="SaveLoad.saveExpression('left')">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="loadModal_left" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">📁 Load Filter Expression (Left)</div>
+            <div class="modal-content">
+                <div class="saved-expressions" id="savedExpressionsList_left"></div>
+                <div style="margin-bottom: 15px;"><strong>Or paste JSON directly:</strong></div>
+                <textarea class="modal-textarea" id="importJson_left" placeholder="Paste expression JSON here..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn danger" onclick="SaveLoad.clearSavedExpressions('left')" style="margin-right: auto;">Clear All Saved</button>
+                <button class="modal-btn cancel" onclick="SaveLoad.closeLoadModal('left')">Cancel</button>
+                <button class="modal-btn" onclick="SaveLoad.loadExpression('left')">Load</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="saveModal_right" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">💾 Save Filter Expression (Right)</div>
+            <div class="modal-content">
+                <input type="text" class="modal-input" id="expressionName_right" placeholder="Enter expression name...">
+                <textarea class="modal-textarea" id="expressionJson_right" placeholder="Expression JSON will appear here..." readonly></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="SaveLoad.closeSaveModal('right')">Cancel</button>
+                <button class="modal-btn" onclick="SaveLoad.saveExpression('right')">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="loadModal_right" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">📁 Load Filter Expression (Right)</div>
+            <div class="modal-content">
+                <div class="saved-expressions" id="savedExpressionsList_right"></div>
+                <div style="margin-bottom: 15px;"><strong>Or paste JSON directly:</strong></div>
+                <textarea class="modal-textarea" id="importJson_right" placeholder="Paste expression JSON here..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn danger" onclick="SaveLoad.clearSavedExpressions('right')" style="margin-right: auto;">Clear All Saved</button>
+                <button class="modal-btn cancel" onclick="SaveLoad.closeLoadModal('right')">Cancel</button>
+                <button class="modal-btn" onclick="SaveLoad.loadExpression('right')">Load</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sequence Selection Modal -->
+    <div class="modal-overlay" id="sequenceLoadModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">📋 Load Sequence Definition</div>
+            <div class="modal-content">
+                <div class="saved-sequences" id="savedSequencesList">
+                    <div style="text-align: center; color: #999; padding: 20px;">Loading saved sequences...</div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn danger" onclick="SequenceLoader.clearAllSequences()" style="margin-right: auto;">Clear All</button>
+                <button class="modal-btn cancel" onclick="SequenceLoader.closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+PS C:\Users\charlie\Documents\Development> mkdir codemirror-folding-demo
+
+    Directory: C:\Users\charlie\Documents\Development
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           7/10/2025 12:18 AM                codemirror-folding-demo
+
+PS C:\Users\charlie\Documents\Development> cd codemirror-folding-demo
+PS C:\Users\charlie\Documents\Development\codemirror-folding-demo> npm init -y
+Wrote to C:\Users\charlie\Documents\Development\codemirror-folding-demo\package.json:
+
+{
+  "name": "codemirror-folding-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
+
+
+
+PS C:\Users\charlie\Documents\Development\codemirror-folding-demo> npm install @codemirror/view @codemirror/state @codemirror/language @codemirror/lang-javascript
+
+added 14 packages, and audited 15 packages in 2s
+
+found 0 vulnerabilities
+PS C:\Users\charlie\Documents\Development\codemirror-folding-demo> npm install --save-dev vite
+
+added 13 packages, and audited 28 packages in 6s
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+PS C:\Users\charlie\Documents\Development\codemirror-folding-demo> npm run dev
+
+> codemirror-folding-demo@1.0.0 dev
+> vite
+
+
+  VITE v7.0.3  ready in 207 ms
+
+  ?  Local:   http://localhost:5173/
+  ?  Network: use --host to expose
+  ?  press h + enter to show help
+12:28:53 AM [vite] (client) page reload main.js
+12:28:53 AM [vite] (client) page reload index.html
+12:34:17 AM [vite] (client) page reload main.js
+12:34:18 AM [vite] (client) page reload index.html
+12:36:43 AM [vite] (client) page reload main.js
+12:36:43 AM [vite] (client) page reload index.html
+12:38:37 AM [vite] (client) page reload main.js
+12:39:41 AM [vite] (client) page reload main.js (x2)
+12:40:49 AM [vite] (client) page reload main.js (x3)
+12:45:40 AM [vite] (client) page reload main.js (x4)
+12:45:40 AM [vite] (client) page reload index.html
+12:48:02 AM [vite] (client) page reload main.js
+12:48:33 AM [vite] (client) page reload main.js (x2)
+12:49:35 AM [vite] (client) page reload main.js (x3)
+12:50:34 AM [vite] (client) page reload main.js (x4)
+12:51:28 AM [vite] (client) page reload main.js (x5)
+12:53:09 AM [vite] (client) page reload main.js (x6)
+12:55:33 AM [vite] (client) page reload main.js (x7)
+12:58:07 AM [vite] (client) page reload main.js (x8)
+12:59:37 AM [vite] (client) page reload main.js (x9)
+1:00:35 AM [vite] (client) page reload main.js (x10)
+1:02:20 AM [vite] (client) page reload main.js (x11)
+1:03:35 AM [vite] (client) page reload main.js (x12)
+1:04:32 AM [vite] (client) page reload main.js (x13)
+1:05:25 AM [vite] (client) page reload main.js (x14)
+1:06:08 AM [vite] (client) page reload main.js (x15)
+1:20:34 AM [vite] (client) page reload index.html
+1:20:34 AM [vite] (client) page reload main.js
+1:21:36 AM [vite] (client) page reload main.js (x2)
+1:22:31 AM [vite] (client) page reload main.js (x3)
+1:23:12 AM [vite] (client) page reload main.js (x4)
+1:23:12 AM [vite] Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language";
+1:23:12 AM [vite] Internal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language";
+      at TransformPluginContext._formatLog (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31432:43)
+      at TransformPluginContext.error (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31429:14)
+      at TransformPluginContext.transform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:29938:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31246:14)
+      at async loadAndTransform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:26416:26)
+      at async viteTransformMiddleware (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:27501:20)
+1:23:12 AM [vite] Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language";
+1:23:19 AM [vite] Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language"; (x2)
+1:23:19 AM [vite] Internal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language";
+      at TransformPluginContext._formatLog (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31432:43)
+      at TransformPluginContext.error (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31429:14)
+      at TransformPluginContext.transform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:29938:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:31246:14)
+      at async loadAndTransform (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:26416:26)
+      at async viteTransformMiddleware (file:///C:/Users/charlie/Documents/Development/codemirror-folding-demo/node_modules/vite/dist/node/chunks/dep-DPTTEEJb.js:27501:20)
+1:23:19 AM [vite] Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. If you are using JSX, make sure to name the file with the .jsx or .tsx extension.
+  Plugin: vite:import-analysis
+  File: C:/Users/charlie/Documents/Development/codemirror-folding-demo/main.js:1:0
+  1  |  import { EditorView, lineNumbers, keymap, Decoration } from "@codemirror/view";
+     |  ^
+  2  |  import { EditorState, StateField } from "@codemirror/state";
+  3  |  import { foldGutter, foldKeymap, foldEffect, unfoldEffect, foldable, syntaxTree, foldState, codeFolding } from "@codemirror/language";
+1:24:20 AM [vite] (client) page reload main.js
+1:25:55 AM [vite] (client) page reload main.js (x2)
+1:26:47 AM [vite] (client) page reload main.js (x3)
