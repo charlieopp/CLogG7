@@ -9,17 +9,6 @@ class UIManagerSequences {
     }
 
     /**
-     * Build sequences for specified panel
-     */
-    buildSequences(panel = 'left') {
-        if (panel === 'right') {
-            CLogApp.modules.sequenceManager.toggleBuildSequences('right');
-        } else {
-            CLogApp.modules.sequenceManager.toggleBuildSequences();
-        }
-    }
-
-    /**
      * Use sequences for specified panel
      */
     useSequences(panel = 'left') {

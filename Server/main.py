@@ -81,16 +81,21 @@ async def websocket_handler(ws: WebSocket):
 
                 # SEQUENCES
                 elif msg_type == "create_sequence":
-                    class Req(BaseModel): pattern: Any; panelId: str
-                    req = Req(**data)
+                    from sequence_engine import SequenceRequest, SequencePattern
+                    pattern = SequencePattern(**data["pattern"])
+                    req = SequenceRequest(panelId=data.get("panelId", "left"), pattern=pattern)
                     resp = await create_pattern(req)
                     resp["type"] = "create_sequence_result"
+                    if data.get("requestId"):
+                        resp["requestId"] = data["requestId"]
                     await ws.send_json(resp)
                 elif msg_type == "find_sequence":
                     class Req(BaseModel): patternId: str; panelId: str; searchOptions: Any = {}; filters: Any = []
                     req = Req(**data)
                     resp = await find_sequences(data["fileId"], req)
                     resp["type"] = "find_sequence_result"
+                    if data.get("requestId"):
+                        resp["requestId"] = data["requestId"]
                     await ws.send_json(resp)
 
                 # FILE BROWSING

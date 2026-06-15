@@ -53,7 +53,7 @@ class UIManagerEvents {
         });
         
         this.uiManager.bindEvent('startSequenceBtn', 'click', () => {
-            CLogApp.modules.sequenceManager.startSequenceDefinition();
+            CLogApp.modules.sequenceManager.saveSequenceDefinition('left');
         });
         
         this.uiManager.bindEvent('clearSequenceBtn', 'click', () => {
@@ -168,7 +168,7 @@ class UIManagerEvents {
             this.uiManager.sequenceMarking.setSequenceEndEvent('right');
         });
         this.uiManager.bindEvent('startSequenceRightBtn', 'click', () => {
-            CLogApp.modules.sequenceManager.startSequenceDefinition('right');
+            CLogApp.modules.sequenceManager.saveSequenceDefinition('right');
         });
         this.uiManager.bindEvent('clearSequenceRightBtn', 'click', () => {
             this.uiManager.sequenceMarking.clearSequenceSelections('right');

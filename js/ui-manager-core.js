@@ -225,6 +225,14 @@ class UIManager {
         return this.utils.showInfoMessage(message);
     }
 
+    createModal(title, content, buttons = []) {
+        return this.modals.createModal(title, content, buttons);
+    }
+
+    closeModal() {
+        return this.modals.closeModal();
+    }
+
     /**
      * Update event display - delegates to utils manager
      */
